@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 
+	"pplavetzki-apis/pkg/routes"
+
 	"github.com/gorilla/mux"
-	"github.com/pplavetzki/pplavetzki-apis/pkg/routes"
 )
 
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {

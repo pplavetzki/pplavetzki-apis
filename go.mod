@@ -1,4 +1,4 @@
-module github.com/pplavetzki/pplavetzki-apis
+module pplavetzki-apis
 
 go 1.13
 
