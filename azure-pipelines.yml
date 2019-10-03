@@ -1,0 +1,27 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+stages:
+- stage: Build
+  displayName: Build and push an image to container registry
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Bash@3
+      env:
+        AZURE: $(AZURE)
+        SUBSCRIPTION: $(SUBSCRIPTION)
+        ACR_PASSWORD: $(ACR_PASSWORD)
+      inputs:
+        targetType: inline
+        script: make all
