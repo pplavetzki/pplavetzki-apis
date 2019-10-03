@@ -7,7 +7,7 @@ SUB = ${SUBSCRIPTION}
 ACR_PSWD = ${ACR_PASSWORD}
 
 .PHONY: all
-all: build-image login push
+all: build-image set-sub login push
 
 .PHONY: build
 build:
@@ -22,12 +22,12 @@ build-image:
 	docker build -t ${IMG} .
 	docker tag ${IMG} ${LATEST}
 
+.PHONY: set-sub
+set-sub:
+	az account set --subscription ${SUB}
+
 .PHONY: login
 login:
-	az acr login --name ${ACR} -u ${ACR} -p ${ACR_PSWD} --subscription ${SUB}
-
-.PHONY: login-local
-login-local:
 	az acr login --name ${ACR} -u ${ACR} -p ${ACR_PSWD}
 
 .PHONY: push
