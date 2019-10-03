@@ -7,7 +7,7 @@ SUB = ${SUBSCRIPTION}
 ACR_PSWD = ${ACR_PASSWORD}
 
 .PHONY: all
-all: build-image login push
+all: swagger build-image login push
 
 .PHONY: build
 build:
@@ -29,6 +29,14 @@ set-sub:
 .PHONY: login
 login:
 	az acr login --name ${ACR} -u ${ACR} -p ${ACR_PSWD}
+
+.PHONY: check-swagger
+check-swagger:
+	which swagger || (GO111MODULE=off go get -u github.com/go-swagger/go-swagger/cmd/swagger)
+
+.PHONY: swagger
+swagger: check-swagger
+	GO111MODULE=on go mod vendor  && GO111MODULE=off swagger generate spec -o ./swagger.json --scan-models
 
 .PHONY: push
 push:

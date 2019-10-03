@@ -8,6 +8,8 @@ import (
 
 	"pplavetzki-apis/pkg/routes"
 
+	_ "pplavetzki-apis/pkg/classification"
+
 	"github.com/gorilla/mux"
 )
 
@@ -21,10 +23,18 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, `{"alive": true}`)
 }
 
+func swaggerHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	http.ServeFile(w, r, "./swagger.json")
+}
+
 func handlerRequests() {
 	r := mux.NewRouter().StrictSlash(true)
-	r.HandleFunc("/healthz", healthCheckHandler).Methods(http.MethodGet)
-	r.HandleFunc("/", routes.GetAllWidgets).Methods(http.MethodGet)
+
+	r.HandleFunc("/api/healthz", healthCheckHandler).Methods(http.MethodGet)
+	r.HandleFunc("/api/widgets", routes.GetAllWidgets).Methods(http.MethodGet)
+	r.Path("/api/swagger/swagger.json").HandlerFunc(swaggerHandler).Methods(http.MethodGet)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

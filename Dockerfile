@@ -11,13 +11,15 @@ RUN go mod download
 
 COPY ./pkg/ ./pkg/
 COPY ./main.go .
+COPY ./swagger.json .
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o apis
 
 #second stage
 FROM alpine:latest
-WORKDIR /root/
 COPY --from=builder /app/pplavetzki-apis/apis /app/
+COPY --from=builder /app/pplavetzki-apis/swagger.json /app/
+WORKDIR /app/
 
 ENTRYPOINT ["/app/apis"]
 

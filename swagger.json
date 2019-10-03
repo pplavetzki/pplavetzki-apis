@@ -1,0 +1,89 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation of our pplavetzki-apis API.",
+    "title": "pplavetzki-apis.",
+    "version": "v0.1.0"
+  },
+  "host": "some-url.com",
+  "basePath": "/",
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "widget-tag"
+        ],
+        "summary": "Gets all Widgets.",
+        "operationId": "get-all-widgets",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/widgetResponse"
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "description": "This verifies the health of the container",
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "health-check"
+        ],
+        "operationId": "get-healthz",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/healthzResponse"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "healthzResponse": {
+      "description": "This returns the health of the api server",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "Alive": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "widgetResponse": {
+      "description": "This will return all of your trusty widgets",
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "Code": {
+              "type": "string"
+            },
+            "Description": {
+              "type": "string"
+            },
+            "Name": {
+              "type": "string"
+            },
+            "Price": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
+      }
+    }
+  }
+}
