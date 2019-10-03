@@ -7,7 +7,7 @@ SUB = ${SUBSCRIPTION}
 ACR_PSWD = ${ACR_PASSWORD}
 
 .PHONY: all
-all: swagger build-image login push
+all: build-image login push
 
 .PHONY: build
 build:
