@@ -2,23 +2,22 @@
 FROM golang:1.13.1-stretch as builder
 
 ENV GO111MODULE=on
-WORKDIR /app
+WORKDIR /app/pplavetzki-apis
 
 COPY go.mod .
 COPY go.sum .
 
 RUN go mod download
 
-COPY pkg/ .
-COPY main.go .
+COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o apis
 
 #second stage
 FROM alpine:latest
 WORKDIR /root/
-RUN apk add --no-cache tzdata
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /tmp/apis .
+COPY --from=builder /app/pplavetzki-apis/apis /app/
 
-CMD ["./apis"]
+ENTRYPOINT ["/app/apis"]
+
+EXPOSE 8080
