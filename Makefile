@@ -7,7 +7,7 @@ SUB = ${SUBSCRIPTION}
 ACR_PSWD = ${ACR_PASSWORD}
 
 .PHONY: all
-all: build-image set-sub login push
+all: build-image login push
 
 .PHONY: build
 build:
