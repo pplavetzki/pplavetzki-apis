@@ -9,7 +9,8 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY . .
+COPY ./pkg/ ./pkg/
+COPY ./main.go .
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o apis
 
