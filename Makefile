@@ -17,7 +17,9 @@ validation: build test
 
 .PHONY: test
 test:
-	go test ./...
+	docker build . -t pplavetzki-api-test:1 --target=testrunner
+	docker run --rm pplavetzki-api-test:1
+	docker image rm pplavetzki-api-test:1
 
 .PHONY: build
 build:
@@ -27,9 +29,9 @@ build:
 clean:
 	rm apis
 
-.PHONY: build-all
+.PHONY: build-image
 build-image:
-	docker build -t ${IMG} .
+	docker build -t ${IMG} --target=executable .
 	docker tag ${IMG} ${LATEST}
 
 .PHONY: set-sub
