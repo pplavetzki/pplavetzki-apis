@@ -1,27 +1,45 @@
 # Docker
 # Build a Docker image 
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+variables:
+  makeFilePath: ./Makefile
 
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+    - master
+    - feature/*
+    - patch/*
 
 resources:
 - repo: self
 
-stages:
-- stage: Build
-  displayName: Build and push an image to container registry
-  jobs:  
-  - job: Build
-    displayName: Build
+jobs:  
+- job: deliveryjobci
+    displayName: "Delivery CI"
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+      fullCI: $[ startsWith(variables['build.sourceBranch'], 'refs/heads/release/pplavetzki-apis') ]
+      buildImage: $[ eq(variables['build.sourceBranch'], 'refs/heads/master') ]
     steps:
     - task: Bash@3
+      displayName: "Build the TestRunner"
       env:
         AZURE: $(AZURE)
         SUBSCRIPTION: $(SUBSCRIPTION)
         ACR_PASSWORD: $(ACR_PASSWORD)
       inputs:
         targetType: inline
-        script: make all
+        script: make validation
+    - task: Bash@3
+      condition: or(eq(variables['buildImage'],True),eq(variables['fullCI'],True))
+      displayName: "Publish Image"
+      env:
+        AZURE: $(AZURE)
+        SUBSCRIPTION: $(SUBSCRIPTION)
+        ACR_PASSWORD: $(ACR_PASSWORD)
+      inputs:
+        targetType: inline
+        script: make publish
